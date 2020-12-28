@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private void populateListView() {
 
         ArrayList<BookData> bookData = new ArrayList<>();
+        //Faker is used for quickly generating all kinds of fake data. Read more here: https://github.com/thiagokimo/Faker
+        // doc: http://dius.github.io/java-faker/apidocs/index.html
         Faker faker = new Faker();
         bookData.add(new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS)));
         bookData.add(new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS)));

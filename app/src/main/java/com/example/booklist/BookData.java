@@ -4,11 +4,15 @@ import java.util.Date;
 
 public class BookData {
 
+    /* Declaring all the variables of the BookData Class, in accordance with the textViews that are in the booklist_layout.xml */
+
     String bookName;
     String deliveryAddress;
     String bookAuthor;
     String contactName;
     Date deliveryDeadline;
+
+    /* Constructor */
 
     public BookData(String bookName, String deliveryAddress, String bookAuthor, String contactName, Date deliveryDeadline) {
         this.bookName = bookName;
@@ -17,6 +21,8 @@ public class BookData {
         this.contactName = contactName;
         this.deliveryDeadline = deliveryDeadline;
     }
+
+    /* Getters and Setters */
 
     public String getBookName() {
         return bookName;

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    /* THE LAYOUT OF THE INITIALLY EMPTY LIST*/
 
     <ListView
         android:id="@+id/mainListView"

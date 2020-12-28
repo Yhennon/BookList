@@ -5,6 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    /* THE LAYOUT FOR REPRESENTING DATA OF A LIST ITEM
+        Each item has five labels and five values, which are generated with Faker.
+    */
+
     <TextView
         android:id="@+id/textViewBookNameLabel"
         style="@style/BookColor"
