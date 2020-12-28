@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">BookList</string>
+
+    <string name="book_name">Könyv cím: </string>
+    <string name="delivery_address" >Szállítási cím: </string>
+    <string name="book_author">Szerző: </string>
+    <string name="contact">Kapcsolattartó: </string>
+    <string name="delivery_deadline">Szállítási határidő: </string>
+</resources>
