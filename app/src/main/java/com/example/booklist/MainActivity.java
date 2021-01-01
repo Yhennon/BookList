@@ -2,20 +2,31 @@ package com.example.booklist;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 import com.example.booklist.databinding.ActivityMainBinding;
 import com.github.javafaker.Faker;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+
+    public static final String EXTRA_BOOKNAME = "com.example.android.booklist.extra.BOOKNAME";
+    public static final String EXTRA_DELIVERYADDR = "com.example.android.booklist.extra.DELIVERYADDR";
+    public static final String EXTRA_BOOKAUTHOR = "com.example.android.booklist.extra.BOOKAUTHOR";
+    public static final String EXTRA_CONTACTNAME = "com.example.android.booklist.extra.CONTACTNAME";
+    public static final String EXTRA_DELIVERYDDL = "com.example.android.booklist.extra.DELVIERYDDL";
+
 
     ActivityMainBinding binding;
     ArrayList<BookData> bookData;
@@ -49,9 +60,21 @@ public class MainActivity extends AppCompatActivity {
         binding.mainListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Fontos tanulság! A különbség ez a két sor között.
+
+                // Fontos tanulság! A különbség ez a két sor között,az első az még csak az egész objektet adja vissza,utána még le kell kérni valamelyik értékét.
                 //Toast.makeText(MainActivity.this, String.valueOf(bookData.get((position))), Toast.LENGTH_SHORT).show();
-                Toast.makeText(MainActivity.this, bookData.get(position).getBookName(), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(MainActivity.this, bookData.get(position).getBookName(), Toast.LENGTH_SHORT).show();
+
+                Log.d(LOG_TAG, "launchDetailsActivity: initiated");
+
+                Intent intentLaunchDetails = new Intent(MainActivity.this, DetailsAcitivity.class);
+                intentLaunchDetails.putExtra(EXTRA_BOOKNAME, bookData.get(position).getBookName());
+                intentLaunchDetails.putExtra(EXTRA_DELIVERYADDR, bookData.get(position).getDeliveryAddress());
+                intentLaunchDetails.putExtra(EXTRA_BOOKAUTHOR, bookData.get(position).getBookAuthor());
+                intentLaunchDetails.putExtra(EXTRA_CONTACTNAME, bookData.get(position).getContactName());
+                intentLaunchDetails.putExtra(EXTRA_DELIVERYDDL, bookData.get(position).getDeliveryDeadline());
+
+                startActivity(intentLaunchDetails);
             }
         });
     }
