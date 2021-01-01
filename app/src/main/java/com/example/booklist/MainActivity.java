@@ -14,7 +14,6 @@ import com.example.booklist.databinding.ActivityMainBinding;
 import com.github.javafaker.Faker;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,8 +35,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(LayoutInflater.from(this));
         setContentView(binding.getRoot());
+        Log.i(LOG_TAG, "onCreate: Created the main view");
 
         populateListView();
+        Log.i(LOG_TAG, "onCreate: Filled the list with books");
     }
 
     private void populateListView() {
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         bookData.add(new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS)));
         bookData.add(new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS)));
 
+        Log.i(LOG_TAG, "populateListView: Created books");
         BookDataAdapter bookDataAdapter = new BookDataAdapter(getBaseContext(), R.layout.booklist_layout, bookData);
 
         binding.mainListView.setAdapter(bookDataAdapter);
@@ -60,12 +62,7 @@ public class MainActivity extends AppCompatActivity {
         binding.mainListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                // Fontos tanulság! A különbség ez a két sor között,az első az még csak az egész objektet adja vissza,utána még le kell kérni valamelyik értékét.
-                //Toast.makeText(MainActivity.this, String.valueOf(bookData.get((position))), Toast.LENGTH_SHORT).show();
-                // Toast.makeText(MainActivity.this, bookData.get(position).getBookName(), Toast.LENGTH_SHORT).show();
-
-                Log.d(LOG_TAG, "launchDetailsActivity: initiated");
+                Log.i(LOG_TAG, "onItemClick: Clicked book at position: " + position);
 
                 Intent intentLaunchDetails = new Intent(MainActivity.this, DetailsAcitivity.class);
                 intentLaunchDetails.putExtra(EXTRA_BOOKNAME, bookData.get(position).getBookName());
@@ -75,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
                 intentLaunchDetails.putExtra(EXTRA_DELIVERYDDL, bookData.get(position).getDeliveryDeadline());
 
                 startActivity(intentLaunchDetails);
+
+                Log.i(LOG_TAG, "onItemClick: Detailed view of the book launched");
             }
         });
     }
