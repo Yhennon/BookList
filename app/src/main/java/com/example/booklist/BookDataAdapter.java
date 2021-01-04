@@ -45,11 +45,11 @@ public class BookDataAdapter extends ArrayAdapter<BookData> {
         convertView = inflater.inflate(resource, parent, false);
 
         /* Connecting the variables in the Adapter with the layout's elements by their given ids.*/
-        TextView textViewBookName = convertView.findViewById(R.id.textViewBookNameD);
-        TextView textViewDeliveryAddress = convertView.findViewById(R.id.textViewDeliveryAddressD);
-        TextView textViewBookAuthor = convertView.findViewById(R.id.textViewBookAuthorD);
-        TextView textViewContact = convertView.findViewById(R.id.textViewContactD);
-        TextView textViewDeliveryDeadline = convertView.findViewById(R.id.textViewDeliveryDeadlineD);
+        TextView textViewBookName = convertView.findViewById(R.id.textViewBookName);
+        TextView textViewDeliveryAddress = convertView.findViewById(R.id.textViewDeliveryAddress);
+        TextView textViewBookAuthor = convertView.findViewById(R.id.textViewBookAuthor);
+        TextView textViewContact = convertView.findViewById(R.id.textViewContact);
+        TextView textViewDeliveryDeadline = convertView.findViewById(R.id.textViewDeliveryDeadline);
 
         /* Lastly, we set the values of the textViews. */
         textViewBookName.setText(bookName);

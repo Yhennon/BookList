@@ -3,22 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    /* THE LAYOUT FOR REPRESENTING DATA OF A LIST ITEM
-    Each item has five labels and five values, which are generated with Faker.
-    */
+    android:layout_height="match_parent"
+    tools:context=".ManualAddActivity">
 
     <TextView
         android:id="@+id/textViewBookNameLabelM"
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="30dp"
         android:text="@string/book_name"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/textViewDeliveryAddressLabelM"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,100 +21,104 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="40dp"
         android:text="@string/delivery_address"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/textViewBookAuthorLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewBookNameLabelM" />
 
     <TextView
-        android:id="@+id/textViewBookAuthorLabel"
+        android:id="@+id/textViewBookAuthorLabelM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="28dp"
         android:text="@string/book_author"
-        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewDeliveryAddressLabelM" />
 
     <TextView
-        android:id="@+id/textViewContactLabel"
+        android:id="@+id/textViewContactLabelM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="28dp"
         android:text="@string/contact"
-        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewBookAuthorLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewBookAuthorLabelM" />
 
     <TextView
-        android:id="@+id/textViewDeliveryDeadlineLabel"
+        android:id="@+id/textViewDeliveryDeadlineLabelM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="28dp"
         android:text="@string/delivery_deadline"
-        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewContactLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewContactLabelM" />
 
-    <TextView
-        android:id="@+id/textViewBookName"
-        style="@style/BookColor"
+    <EditText
+        android:id="@+id/editTextBookNameM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="18dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/textViewDeliveryAddress"
-        app:layout_constraintStart_toEndOf="@+id/textViewDeliveryDeadlineLabel"
+        android:layout_marginTop="28dp"
+        android:hint="@string/add_b_name"
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewBookNameLabelM"
+        app:layout_constraintStart_toEndOf="@+id/textViewDeliveryDeadlineLabelM"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textViewDeliveryAddress"
+    <EditText
+        android:id="@+id/editTextDeliveryAddressM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/textViewBookAuthor"
-        app:layout_constraintStart_toEndOf="@+id/textViewDeliveryDeadlineLabel"
-        app:layout_constraintTop_toBottomOf="@+id/textViewBookName" />
+        android:hint="@string/add_del_addr"
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewDeliveryAddressLabelM"
+        app:layout_constraintStart_toEndOf="@+id/textViewDeliveryDeadlineLabelM"
+        />
 
-    <TextView
-        android:id="@+id/textViewBookAuthor"
+    <EditText
+        android:id="@+id/editTextBookAuthorM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        android:visibility="gone"
-        app:layout_constraintStart_toEndOf="@+id/textViewDeliveryDeadlineLabel"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDeliveryAddress" />
+        android:hint="@string/add_b_author"
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewBookAuthorLabelM"
+        app:layout_constraintStart_toEndOf="@+id/textViewDeliveryDeadlineLabelM" />
 
-    <TextView
-        android:id="@+id/textViewContact"
+    <EditText
+        android:id="@+id/editTextContactM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        android:visibility="gone"
-        app:layout_constraintStart_toEndOf="@+id/textViewDeliveryDeadlineLabel"
-        app:layout_constraintTop_toBottomOf="@+id/textViewBookAuthor" />
+        android:hint="@string/add_c_name"
+        android:inputType="text"
+        app:layout_constraintStart_toEndOf="@+id/textViewDeliveryDeadlineLabelM"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewContactLabelM" />
 
-    <TextView
-        android:id="@+id/textViewDeliveryDeadline"
+    <EditText
+        android:id="@+id/editTextDeliveryDeadlineM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        android:text="TextView"
-        android:visibility="gone"
-        app:layout_constraintStart_toEndOf="@+id/textViewDeliveryDeadlineLabel"
-        app:layout_constraintTop_toBottomOf="@+id/textViewContact" />
+        android:hint="@string/add_del_ddl"
+        android:inputType="date"
+        app:layout_constraintStart_toEndOf="@+id/textViewDeliveryDeadlineLabelM"
+        app:layout_constraintTop_toBottomOf="@+id/editTextContactM"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewDeliveryDeadlineLabelM"/>
+
+    <Button
+        android:id="@+id/buttonAddBookM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/addbook"
+        android:layout_marginTop="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDeliveryDeadlineLabelM" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

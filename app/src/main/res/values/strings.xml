@@ -6,4 +6,11 @@
     <string name="book_author">Szerző: </string>
     <string name="contact">Kapcsolattartó: </string>
     <string name="delivery_deadline">Szállítási határidő: </string>
+    <string name="addbook">Add</string>
+
+    <string name="add_del_ddl">Enter delivery deadline</string>
+    <string name="add_c_name">Enter contact\'s name</string>
+    <string name="add_b_author">Enter book author\'s name</string>
+    <string name="add_del_addr">Enter delivery address</string>
+    <string name="add_b_name" >Enter bookname</string>
 </resources>

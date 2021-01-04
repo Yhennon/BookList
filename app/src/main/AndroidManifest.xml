@@ -10,6 +10,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BookList">
         <activity
+            android:name=".ManualAddActivity"
+            android:parentActivityName=".MainActivity">
+        </activity>
+
+        <activity
             android:name=".DetailsAcitivity"
             android:label="Details Activity"
             android:parentActivityName=".MainActivity">
@@ -17,6 +22,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.booklist.MainActivity" />
         </activity>
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
