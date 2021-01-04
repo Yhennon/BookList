@@ -6,17 +6,18 @@
     android:layout_height="match_parent">
 
     /* THE LAYOUT FOR REPRESENTING DATA OF A LIST ITEM
-        Each item has five labels and five values, which are generated with Faker.
+    Each item has five labels and five values, which are generated with Faker.
     */
 
     <TextView
         android:id="@+id/textViewBookNameLabelD"
-        style="@style/BookColor"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:text="@string/book_name"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/textViewDeliveryAddressLabelD"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,7 +29,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:text="@string/delivery_address"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/textViewBookAuthorLabelD"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewBookNameLabelD" />
@@ -40,7 +41,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:text="@string/book_author"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewDeliveryAddressLabelD" />
 
@@ -51,7 +52,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:text="@string/contact"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewBookAuthorLabelD" />
 
@@ -62,16 +63,17 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:text="@string/delivery_deadline"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewContactLabelD" />
 
     <TextView
         android:id="@+id/textViewBookNameD"
+        style="@style/BookColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="33dp"
+        android:layout_marginTop="18dp"
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/textViewDeliveryAddressD"
         app:layout_constraintStart_toEndOf="@+id/textViewDeliveryDeadlineLabelD"
@@ -84,7 +86,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/textViewBookAuthorD"
         app:layout_constraintStart_toEndOf="@+id/textViewDeliveryDeadlineLabelD"
         app:layout_constraintTop_toBottomOf="@+id/textViewBookNameD" />
@@ -96,7 +98,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintStart_toEndOf="@+id/textViewDeliveryDeadlineLabelD"
         app:layout_constraintTop_toBottomOf="@+id/textViewDeliveryAddressD" />
 
@@ -107,7 +109,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintStart_toEndOf="@+id/textViewDeliveryDeadlineLabelD"
         app:layout_constraintTop_toBottomOf="@+id/textViewBookAuthorD" />
 
@@ -118,7 +120,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintStart_toEndOf="@+id/textViewDeliveryDeadlineLabelD"
         app:layout_constraintTop_toBottomOf="@+id/textViewContactD" />
 </androidx.constraintlayout.widget.ConstraintLayout>

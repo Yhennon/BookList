@@ -16,6 +16,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:text="@string/book_name"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/textViewDeliveryAddressLabelD"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,11 +26,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:text="@string/delivery_address"
         app:layout_constraintBottom_toTopOf="@+id/textViewBookAuthorLabelD"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewBookNameLabelD" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewBookNameD" />
 
     <TextView
         android:id="@+id/textViewBookAuthorLabelD"
@@ -65,11 +66,12 @@
         android:id="@+id/textViewBookNameD"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="33dp"
         android:text="TextView"
+        style="@style/BookColor"
         app:layout_constraintBottom_toTopOf="@+id/textViewDeliveryAddressD"
-        app:layout_constraintStart_toEndOf="@+id/textViewDeliveryDeadlineLabelD"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView

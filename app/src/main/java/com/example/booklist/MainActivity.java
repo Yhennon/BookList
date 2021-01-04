@@ -2,6 +2,8 @@ package com.example.booklist;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.accounts.AccountManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void populateListView() {
 
-        bookData = new ArrayList<>();
+        bookData = new ArrayList<>(); //?
         //Faker is used for quickly generating all kinds of fake data. Read more here: https://github.com/thiagokimo/Faker
         // doc: http://dius.github.io/java-faker/apidocs/index.html
         Faker faker = new Faker();
@@ -71,11 +73,16 @@ public class MainActivity extends AppCompatActivity {
                 intentLaunchDetails.putExtra(EXTRA_CONTACTNAME, bookData.get(position).getContactName());
                 intentLaunchDetails.putExtra(EXTRA_DELIVERYDDL, bookData.get(position).getDeliveryDeadline());
 
-                startActivity(intentLaunchDetails);
+                //startactivityforresult hogyha visszakérünk valmit
+                startActivityForResult(intentLaunchDetails,1);
 
                 Log.i(LOG_TAG, "onItemClick: Detailed view of the book launched");
             }
         });
     }
+
+    //ACtivity result
+
+
 
 }
