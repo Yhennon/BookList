@@ -18,8 +18,10 @@ import android.widget.AdapterView;
 
 import com.example.booklist.databinding.ActivityMainBinding;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -103,38 +105,12 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == 5) {
             super.onActivityResult(requestCode, resultCode, data);
             Log.d(LOG_TAG, "onActivityResult: started");
-            // TODO:
-            // TALÁN LEGFONTOSABB: EZEKET,MEG PL NULLRA ELLENŐRZÉST  ROSSZ HELYEZN VÉGZEM MOST,NEM?
-            // MANUALADDACTIVITYBEN KELLENE, ÉS HA ROSSZ, EL SE ENGEDNI IDE A MAINACTIVITYHEZ
-            // Should also accpet formats like:
-            // yyyy/m/dd
-            // yyyy/mm/d
-            // yyyy/m/d
-            // yyyy.mm.dd
-            // yyyy.mm.d
-            // yyyy.m.dd
-            // yyyy.m.d
-            // maybe use 2 formats, one with /, one with .
-            // where there are only 1 m or 1 d, use a leading zero
 
             String ba1 = data.getStringExtra(ManualAddActivity.EXTRA_ADD_BOOKNAME);
             String ba2 = data.getStringExtra(ManualAddActivity.EXTRA_ADD_DELIVERYADDR);
             String ba3 = data.getStringExtra(ManualAddActivity.EXTRA_ADD_BOOKAUTHOR);
             String ba4 = data.getStringExtra(ManualAddActivity.EXTRA_ADD_CONTACTNAME);
             String ba5 = data.getStringExtra(ManualAddActivity.EXTRA_ADD_DELIVERYDDL);
-
-            // A DÁTUMFORMÁZÁST NEM ITT KELL ELVÉGEZNI,MERT A DB-BE MÉG STRINGKÉNT TUDOM BEVINNI CSAK A DÁTUMOT
-
-            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-
-//            Date ba5date = null;
-//            try {
-//                ba5date = format.parse(ba5);
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-
-//            bookData.add(new BookData(String.valueOf(ba1), ba2, ba3, ba4, ba5));
 
             bookDatabase.addBook(ba1, ba2, ba3, ba4, ba5);
             populateListView();
@@ -149,8 +125,15 @@ public class MainActivity extends AppCompatActivity {
         Cursor cur = bookDatabase.getAllBooks();
 
         while (cur.moveToNext()) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+            String convert = cur.getString(4);
 
-            //azthiszem itt,mielőtt addolunk, azelőtt kell átváltani dátumba
+            Date convertAsDate = null;
+            try {
+                 convertAsDate = format.parse(convert);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             bookDataPopulateList.add(new BookData(cur.getString(0),
 
@@ -160,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
 
                     cur.getString(3),
 
-                    cur.getString(4)
+                    convertAsDate
             ));
         }
 
