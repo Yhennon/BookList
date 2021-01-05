@@ -1,10 +1,18 @@
 package com.example.booklist;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.DatabaseErrorHandler;
+import android.database.sqlite.SQLiteCursorDriver;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQuery;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -14,7 +22,9 @@ import android.widget.AdapterView;
 
 import com.example.booklist.databinding.ActivityMainBinding;
 import com.github.javafaker.Faker;
+import com.mifmif.common.regex.Main;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,6 +45,41 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<BookData> bookData;
     Faker faker;
 
+
+    private static final String DATABASE_NAME = "books_db";
+    private static final int DATABASE_VERSION = 1;
+    private static final String CREATE_TABLE = "create table if not exists ";
+    private static final String ID_TYPE = " integer primary key autoincrement";
+    private static final String COMMA_SEPARATOR = ", ";
+    private static final String SELECT_ALL = "select * from ";
+    private static final String UNIQUE_MODIFIER = " unique";
+    private static final String WHERE = " where";
+    private static final String STRING_TYPE_50 = " varchar(50)";
+    private static final String DELETE_FROM = "delete from ";
+
+    private static final String BOOKS_TABLE = "books";
+    private static final String BOOKS_TABLE_BOOKNAME = "bookname";
+    private static final String BOOKS_TABLE_DELIVERYADDR = "deliveryaddress";
+    private static final String BOOKS_TABLE_BOOKAUTHOR = "bookauthor";
+    private static final String BOOKS_TABLE_CONTACT = "contactname";
+    private static final String BOOKS_TABLE_DELIVERYDDL = "deliverydeadline";
+
+    private static final String CREATE_BOOKS_TABLE = CREATE_TABLE + BOOKS_TABLE + " ("
+            + BOOKS_TABLE_BOOKNAME + STRING_TYPE_50 + COMMA_SEPARATOR
+            + BOOKS_TABLE_DELIVERYADDR + STRING_TYPE_50 + COMMA_SEPARATOR
+            + BOOKS_TABLE_BOOKAUTHOR + STRING_TYPE_50 + COMMA_SEPARATOR
+            + BOOKS_TABLE_CONTACT + STRING_TYPE_50 + COMMA_SEPARATOR
+            + BOOKS_TABLE_DELIVERYDDL + STRING_TYPE_50  + ");";
+
+    SQLiteDatabase.CursorFactory cursorFactory = new SQLiteDatabase.CursorFactory() {
+        @Override
+        public Cursor newCursor(SQLiteDatabase sqLiteDatabase, SQLiteCursorDriver sqLiteCursorDriver, String s, SQLiteQuery sqLiteQuery) {
+            return null;
+        }
+    };
+
+    BookDatabase bookDatabase = new BookDatabase(MainActivity.this,DATABASE_NAME,null,DATABASE_VERSION);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +91,12 @@ public class MainActivity extends AppCompatActivity {
         bookData = new ArrayList<>();
         faker = new Faker();
 
-        feltolt();
+        Log.d(LOG_TAG, "onCreate: TEST BEFORE FELTOLT");
+        feltoltDB();
+        Log.d(LOG_TAG, "onCreate: FELTOLTDB SUCCESFUL");
         populateListView();
+        bookDatabase.getAllBooks();
+        Log.d(LOG_TAG, "onCreate: GETALLBOOKS SUCCESFUL");
 
 
         /* LISTENERS */
@@ -121,25 +170,117 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void feltolt() {
-        bookData.add(new BookData("Anything", "Should", "Do", "ForNow", new Date()));
-        bookData.add(new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS)));
-        bookData.add(new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS)));
-        bookData.add(new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS)));
-        bookData.add(new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS)));
-        bookData.add(new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS)));
+    private void feltoltDB() {
+//        bookData.add(new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS)));
+//        bookData.add(new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS)));
+//        bookData.add(new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS)));
+//        bookData.add(new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS)));
+//        bookData.add(new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS)));
+        BookData dbBookData1 = new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS));
+        Log.d(LOG_TAG, "feltoltDB: dbBookData1 created");
+        bookDatabase.addBook(dbBookData1.getBookName(),dbBookData1.getDeliveryAddress(),dbBookData1.getBookAuthor(),dbBookData1.getContactName(),dbBookData1.getDeliveryDeadline().toString());
+        Log.d(LOG_TAG, "feltoltDB: dbBookData1 added to database");
     }
-
     private void populateListView() {
-        //Faker is used for quickly generating all kinds of fake data. Read more here: https://github.com/thiagokimo/Faker
-        // doc: http://dius.github.io/java-faker/apidocs/index.html
         Log.d(LOG_TAG, "populateListView: data elements " + bookData.size());
-        BookDataAdapter bookDataAdapter = new BookDataAdapter(getBaseContext(), R.layout.booklist_layout, bookData);
+
+        ArrayList<BookData> bookDataPopulate  = new ArrayList<>();
+        Cursor cur = bookDatabase.getAllBooks();
+
+        while (cur.moveToNext()) {
+
+            bookDataPopulate.add(new BookData(cur.getString(0),
+
+                    cur.getString(1),
+
+                    cur.getString(2),
+
+                    cur.getString(3),
+
+                    cur.getType(4)
+
+            ));
+
+        }
+
+        allItems.addAll(offlineItems);
+
+
+        BookDataAdapter bookDataAdapter = new BookDataAdapter(MainActivity.this, R.layout.booklist_layout, bookData);
 
         binding.mainListView.setAdapter(bookDataAdapter);
+
+
+
     }
 
+    /* MYDATABASE */
+
+    public class BookDatabase extends SQLiteOpenHelper {
 
 
+        public BookDatabase(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+            super(context, name, factory, version);
+        }
+
+        public BookDatabase(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version, @Nullable DatabaseErrorHandler errorHandler) {
+            super(context, name, factory, version, errorHandler);
+        }
+
+//        public BookDatabase(@Nullable Context context, @Nullable String name, int version, @NonNull SQLiteDatabase.OpenParams openParams) {
+//            super(context, name, version, openParams);
+//        }
+
+        @Override
+        public void onCreate(SQLiteDatabase sqLiteDatabase) {
+            sqLiteDatabase.execSQL(CREATE_BOOKS_TABLE);
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        }
+
+        //Feladat: Készíts egy SQLite adatbázist a könyvekhez. A könyvek listázását és a hozzáadást oldd meg adatbázissal.
+
+        /* Összes könyv listázása */
+        public Cursor getAllBooks() {
+            SQLiteDatabase db = getReadableDatabase();
+            String query = SELECT_ALL + BOOKS_TABLE + ";";
+            Log.d(LOG_TAG, "getAllBooks: query: " + query);
+            Cursor data = db.rawQuery(query, null); // rawQuery : Runs the provided SQL and returns a Cursor over the result set.
+            Log.d(LOG_TAG, "getAllUsers: query was succesful");
+            data.close();
+            db.close();
+            return data;
+        }
+        /* 1 könyv hozzáadása */
+
+        public boolean addBook(String bookname, String deliveryaddress, String bookauthor, String contactname, String deliverydeadline) {
+            SQLiteDatabase db = getWritableDatabase();
+            Log.d(LOG_TAG, "addBook: got the DB");
+            ContentValues cv = new ContentValues();
+
+            cv.put(BOOKS_TABLE_BOOKNAME, bookname);
+            cv.put(BOOKS_TABLE_DELIVERYADDR, deliveryaddress);
+            cv.put(BOOKS_TABLE_BOOKAUTHOR, bookauthor);
+            cv.put(BOOKS_TABLE_CONTACT, contactname);
+            cv.put(BOOKS_TABLE_DELIVERYDDL, deliverydeadline);
+            Log.d(LOG_TAG, "addBook: put the contentvalues ");
+            long result = db.insert(BOOKS_TABLE, null, cv); // returns the id of the newly inserted row, or -1 if an error occured
+
+            Log.d(LOG_TAG, "addBook: adding book result: " + result );
+            db.close();
+
+            if (result == -1) {
+                return false;
+            } else {
+                return true;
+            }
+
+        }
+
+
+
+    }
 
 }
