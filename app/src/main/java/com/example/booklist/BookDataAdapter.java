@@ -39,7 +39,7 @@ public class BookDataAdapter extends ArrayAdapter<BookData> {
         String deliveryAddress = getItem(position).getDeliveryAddress();
         String bookAuthor = getItem(position).getBookAuthor();
         String contactName = getItem(position).getContactName();
-        Date deliveryDeadline = getItem(position).getDeliveryDeadline();
+        String deliveryDeadline = getItem(position).getDeliveryDeadline();
 
         LayoutInflater inflater = LayoutInflater.from(context);
         convertView = inflater.inflate(resource, parent, false);

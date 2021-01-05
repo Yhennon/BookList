@@ -1,6 +1,5 @@
 package com.example.booklist;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,9 +21,7 @@ import android.widget.AdapterView;
 
 import com.example.booklist.databinding.ActivityMainBinding;
 import com.github.javafaker.Faker;
-import com.mifmif.common.regex.Main;
 
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,17 +42,13 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<BookData> bookData;
     Faker faker;
 
-
     private static final String DATABASE_NAME = "books_db";
     private static final int DATABASE_VERSION = 1;
     private static final String CREATE_TABLE = "create table if not exists ";
-    private static final String ID_TYPE = " integer primary key autoincrement";
     private static final String COMMA_SEPARATOR = ", ";
     private static final String SELECT_ALL = "select * from ";
-    private static final String UNIQUE_MODIFIER = " unique";
-    private static final String WHERE = " where";
     private static final String STRING_TYPE_50 = " varchar(50)";
-    private static final String DELETE_FROM = "delete from ";
+
 
     private static final String BOOKS_TABLE = "books";
     private static final String BOOKS_TABLE_BOOKNAME = "bookname";
@@ -69,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             + BOOKS_TABLE_DELIVERYADDR + STRING_TYPE_50 + COMMA_SEPARATOR
             + BOOKS_TABLE_BOOKAUTHOR + STRING_TYPE_50 + COMMA_SEPARATOR
             + BOOKS_TABLE_CONTACT + STRING_TYPE_50 + COMMA_SEPARATOR
-            + BOOKS_TABLE_DELIVERYDDL + STRING_TYPE_50  + ");";
+            + BOOKS_TABLE_DELIVERYDDL + STRING_TYPE_50 + ");";
 
     SQLiteDatabase.CursorFactory cursorFactory = new SQLiteDatabase.CursorFactory() {
         @Override
@@ -78,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    BookDatabase bookDatabase = new BookDatabase(MainActivity.this,DATABASE_NAME,null,DATABASE_VERSION);
+    BookDatabase bookDatabase = new BookDatabase(MainActivity.this, DATABASE_NAME, null, DATABASE_VERSION);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,12 +84,12 @@ public class MainActivity extends AppCompatActivity {
         bookData = new ArrayList<>();
         faker = new Faker();
 
-        Log.d(LOG_TAG, "onCreate: TEST BEFORE FELTOLT");
-        feltoltDB();
-        Log.d(LOG_TAG, "onCreate: FELTOLTDB SUCCESFUL");
+//        Log.d(LOG_TAG, "onCreate: TEST BEFORE FELTOLT");
+//        feltoltDB();
+//        Log.d(LOG_TAG, "onCreate: FELTOLTDB SUCCESFUL");
         populateListView();
-        bookDatabase.getAllBooks();
-        Log.d(LOG_TAG, "onCreate: GETALLBOOKS SUCCESFUL");
+
+//        Log.d(LOG_TAG, "onCreate: GETALLBOOKS SUCCESFUL");
 
 
         /* LISTENERS */
@@ -155,14 +148,16 @@ public class MainActivity extends AppCompatActivity {
             String ba4 = data.getStringExtra(ManualAddActivity.EXTRA_ADD_CONTACTNAME);
             String ba5 = data.getStringExtra(ManualAddActivity.EXTRA_ADD_DELIVERYDDL);
 
-            Date ba5date = null;
-            try {
-                ba5date = format.parse(ba5);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            bookDatabase.addBook(ba1, ba2, ba3, ba4, ba5);
 
-            bookData.add(new BookData(String.valueOf(ba1), ba2, ba3, ba4, ba5date));
+//            Date ba5date = null;
+//            try {
+//                ba5date = format.parse(ba5);
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+
+//            bookData.add(new BookData(String.valueOf(ba1), ba2, ba3, ba4, ba5));
             populateListView();
 
         } else {
@@ -176,15 +171,16 @@ public class MainActivity extends AppCompatActivity {
 //        bookData.add(new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS)));
 //        bookData.add(new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS)));
 //        bookData.add(new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS)));
-        BookData dbBookData1 = new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS));
-        Log.d(LOG_TAG, "feltoltDB: dbBookData1 created");
-        bookDatabase.addBook(dbBookData1.getBookName(),dbBookData1.getDeliveryAddress(),dbBookData1.getBookAuthor(),dbBookData1.getContactName(),dbBookData1.getDeliveryDeadline().toString());
-        Log.d(LOG_TAG, "feltoltDB: dbBookData1 added to database");
+//        BookData dbBookData1 = new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS));
+//        Log.d(LOG_TAG, "feltoltDB: dbBookData1 created");
+//        bookDatabase.addBook(dbBookData1.getBookName(),dbBookData1.getDeliveryAddress(),dbBookData1.getBookAuthor(),dbBookData1.getContactName(),dbBookData1.getDeliveryDeadline().toString());
+//        Log.d(LOG_TAG, "feltoltDB: dbBookData1 added to database");
     }
+
     private void populateListView() {
         Log.d(LOG_TAG, "populateListView: data elements " + bookData.size());
 
-        ArrayList<BookData> bookDataPopulate  = new ArrayList<>();
+        ArrayList<BookData> bookDataPopulate = new ArrayList<>();
         Cursor cur = bookDatabase.getAllBooks();
 
         while (cur.moveToNext()) {
@@ -197,20 +193,19 @@ public class MainActivity extends AppCompatActivity {
 
                     cur.getString(3),
 
-                    cur.getType(4)
+                    cur.getString(4)
 
             ));
 
         }
 
-        allItems.addAll(offlineItems);
+        bookData.clear();
+        bookData.addAll(bookDataPopulate);
 
 
-        BookDataAdapter bookDataAdapter = new BookDataAdapter(MainActivity.this, R.layout.booklist_layout, bookData);
+        BookDataAdapter bookDataAdapter = new BookDataAdapter(MainActivity.this, R.layout.booklist_layout, bookData);// bookDataPopulate?
 
         binding.mainListView.setAdapter(bookDataAdapter);
-
-
 
     }
 
@@ -249,8 +244,8 @@ public class MainActivity extends AppCompatActivity {
             Log.d(LOG_TAG, "getAllBooks: query: " + query);
             Cursor data = db.rawQuery(query, null); // rawQuery : Runs the provided SQL and returns a Cursor over the result set.
             Log.d(LOG_TAG, "getAllUsers: query was succesful");
-            data.close();
-            db.close();
+            // data.close();
+            //db.close();
             return data;
         }
         /* 1 könyv hozzáadása */
@@ -268,8 +263,8 @@ public class MainActivity extends AppCompatActivity {
             Log.d(LOG_TAG, "addBook: put the contentvalues ");
             long result = db.insert(BOOKS_TABLE, null, cv); // returns the id of the newly inserted row, or -1 if an error occured
 
-            Log.d(LOG_TAG, "addBook: adding book result: " + result );
-            db.close();
+            Log.d(LOG_TAG, "addBook: adding book result: " + result);
+            //  db.close();
 
             if (result == -1) {
                 return false;
@@ -278,7 +273,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-
 
 
     }

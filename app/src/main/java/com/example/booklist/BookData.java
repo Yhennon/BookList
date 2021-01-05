@@ -12,11 +12,11 @@ public class BookData {
     String deliveryAddress;
     String bookAuthor;
     String contactName;
-    Date deliveryDeadline;
+    String deliveryDeadline;
 
     /* Constructor */
 
-    public BookData(String bookName, String deliveryAddress, String bookAuthor, String contactName, Date deliveryDeadline) {
+    public BookData(String bookName, String deliveryAddress, String bookAuthor, String contactName, String deliveryDeadline) {
         this.bookName = bookName;
         this.deliveryAddress = deliveryAddress;
         this.bookAuthor = bookAuthor;
@@ -59,11 +59,11 @@ public class BookData {
         this.contactName = contactName;
     }
 
-    public Date getDeliveryDeadline() {
+    public String getDeliveryDeadline() {
         return deliveryDeadline;
     }
 
-    public void setDeliveryDeadline(Date deliveryDeadline) {
+    public void setDeliveryDeadline(String deliveryDeadline) {
         this.deliveryDeadline = deliveryDeadline;
     }
 }

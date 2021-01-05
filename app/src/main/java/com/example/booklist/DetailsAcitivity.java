@@ -46,9 +46,12 @@ public class DetailsAcitivity extends AppCompatActivity {
         Log.i(LOG_TAG, "onCreate: Kapcsolattartó: "+val4);
         contactName.setText(val4);
 
-        Date val5 = (Date) intent.getSerializableExtra(MainActivity.EXTRA_DELIVERYDDL);
-        Log.i(LOG_TAG, "onCreate: Határidő: "+val5);
-        deliveryDdl.setText(val5.toString());
+//        Date val5 = (Date) intent.getSerializableExtra(MainActivity.EXTRA_DELIVERYDDL);
+//        Log.i(LOG_TAG, "onCreate: Határidő: "+val5);
+//        deliveryDdl.setText(val5.toString());
+
+        String val5 = intent.getStringExtra(MainActivity.EXTRA_DELIVERYDDL);
+        Log.i(LOG_TAG, "onCreate: Szállítási határidő:"+val5);
 
 
     }

@@ -63,6 +63,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="28dp"
         android:hint="@string/add_b_name"
+        android:text="Tesztcím"
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="@+id/textViewBookNameLabelM"
         app:layout_constraintStart_toEndOf="@+id/textViewDeliveryDeadlineLabelM"
@@ -75,6 +76,7 @@
         android:layout_marginStart="24dp"
         android:hint="@string/add_del_addr"
         android:inputType="text"
+        android:text="tesztszáll"
         app:layout_constraintBottom_toBottomOf="@+id/textViewDeliveryAddressLabelM"
         app:layout_constraintStart_toEndOf="@+id/textViewDeliveryDeadlineLabelM"
         />
@@ -85,6 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:hint="@string/add_b_author"
+        android:text="tesztszerző"
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="@+id/textViewBookAuthorLabelM"
         app:layout_constraintStart_toEndOf="@+id/textViewDeliveryDeadlineLabelM" />
@@ -96,6 +99,7 @@
         android:layout_marginStart="24dp"
         android:hint="@string/add_c_name"
         android:inputType="text"
+        android:text="tesztcontanct"
         app:layout_constraintStart_toEndOf="@+id/textViewDeliveryDeadlineLabelM"
         app:layout_constraintBottom_toBottomOf="@+id/textViewContactLabelM" />
 
