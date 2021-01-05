@@ -107,6 +107,7 @@
         android:layout_marginTop="8dp"
         android:hint="@string/add_del_ddl"
         android:inputType="date"
+        android:text="2020/12/31"
         app:layout_constraintStart_toEndOf="@+id/textViewDeliveryDeadlineLabelM"
         app:layout_constraintTop_toBottomOf="@+id/editTextContactM"
         app:layout_constraintBottom_toBottomOf="@+id/textViewDeliveryDeadlineLabelM"/>
