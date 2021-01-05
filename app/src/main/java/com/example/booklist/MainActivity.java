@@ -7,11 +7,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DatabaseErrorHandler;
-import android.database.sqlite.SQLiteCursorDriver;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteQuery;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -20,13 +17,9 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.example.booklist.databinding.ActivityMainBinding;
-import com.github.javafaker.Faker;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,17 +31,13 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_CONTACTNAME = "com.example.android.booklist.extra.CONTACTNAME";
     public static final String EXTRA_DELIVERYDDL = "com.example.android.booklist.extra.DELVIERYDDL";
 
-    ActivityMainBinding binding;
-    ArrayList<BookData> bookData;
-    Faker faker;
-
     private static final String DATABASE_NAME = "books_db";
     private static final int DATABASE_VERSION = 1;
     private static final String CREATE_TABLE = "create table if not exists ";
     private static final String COMMA_SEPARATOR = ", ";
     private static final String SELECT_ALL = "select * from ";
     private static final String STRING_TYPE_50 = " varchar(50)";
-
+    private static final String DELETE_FROM = "delete from ";
 
     private static final String BOOKS_TABLE = "books";
     private static final String BOOKS_TABLE_BOOKNAME = "bookname";
@@ -64,13 +53,8 @@ public class MainActivity extends AppCompatActivity {
             + BOOKS_TABLE_CONTACT + STRING_TYPE_50 + COMMA_SEPARATOR
             + BOOKS_TABLE_DELIVERYDDL + STRING_TYPE_50 + ");";
 
-    SQLiteDatabase.CursorFactory cursorFactory = new SQLiteDatabase.CursorFactory() {
-        @Override
-        public Cursor newCursor(SQLiteDatabase sqLiteDatabase, SQLiteCursorDriver sqLiteCursorDriver, String s, SQLiteQuery sqLiteQuery) {
-            return null;
-        }
-    };
-
+    ActivityMainBinding binding;
+    ArrayList<BookData> bookDataList;
     BookDatabase bookDatabase = new BookDatabase(MainActivity.this, DATABASE_NAME, null, DATABASE_VERSION);
 
     @Override
@@ -81,16 +65,10 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(LOG_TAG, "onCreate: Set the main view");
 
-        bookData = new ArrayList<>();
-        faker = new Faker();
+        bookDataList = new ArrayList<>();
 
-//        Log.d(LOG_TAG, "onCreate: TEST BEFORE FELTOLT");
-//        feltoltDB();
-//        Log.d(LOG_TAG, "onCreate: FELTOLTDB SUCCESFUL");
+//      bookDatabase.deleteAllBooks();
         populateListView();
-
-//        Log.d(LOG_TAG, "onCreate: GETALLBOOKS SUCCESFUL");
-
 
         /* LISTENERS */
         binding.mainListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -99,11 +77,11 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(LOG_TAG, "onItemClick: Clicked book at position: " + position);
 
                 Intent intentLaunchDetails = new Intent(MainActivity.this, DetailsAcitivity.class);
-                intentLaunchDetails.putExtra(EXTRA_BOOKNAME, bookData.get(position).getBookName());
-                intentLaunchDetails.putExtra(EXTRA_DELIVERYADDR, bookData.get(position).getDeliveryAddress());
-                intentLaunchDetails.putExtra(EXTRA_BOOKAUTHOR, bookData.get(position).getBookAuthor());
-                intentLaunchDetails.putExtra(EXTRA_CONTACTNAME, bookData.get(position).getContactName());
-                intentLaunchDetails.putExtra(EXTRA_DELIVERYDDL, bookData.get(position).getDeliveryDeadline());
+                intentLaunchDetails.putExtra(EXTRA_BOOKNAME, bookDataList.get(position).getBookName());
+                intentLaunchDetails.putExtra(EXTRA_DELIVERYADDR, bookDataList.get(position).getDeliveryAddress());
+                intentLaunchDetails.putExtra(EXTRA_BOOKAUTHOR, bookDataList.get(position).getBookAuthor());
+                intentLaunchDetails.putExtra(EXTRA_CONTACTNAME, bookDataList.get(position).getContactName());
+                intentLaunchDetails.putExtra(EXTRA_DELIVERYDDL, bookDataList.get(position).getDeliveryDeadline());
 
                 startActivity(intentLaunchDetails);
                 Log.i(LOG_TAG, "onItemClick: Detailed view of the book launched");
@@ -123,11 +101,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == 5) {
-            Log.i(LOG_TAG, "onActivityResult: " + resultCode);
-            Log.i(LOG_TAG, "onActivityResult: started");
             super.onActivityResult(requestCode, resultCode, data);
-
-            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+            Log.d(LOG_TAG, "onActivityResult: started");
             // TODO:
             // TALÁN LEGFONTOSABB: EZEKET,MEG PL NULLRA ELLENŐRZÉST  ROSSZ HELYEZN VÉGZEM MOST,NEM?
             // MANUALADDACTIVITYBEN KELLENE, ÉS HA ROSSZ, EL SE ENGEDNI IDE A MAINACTIVITYHEZ
@@ -148,7 +123,9 @@ public class MainActivity extends AppCompatActivity {
             String ba4 = data.getStringExtra(ManualAddActivity.EXTRA_ADD_CONTACTNAME);
             String ba5 = data.getStringExtra(ManualAddActivity.EXTRA_ADD_DELIVERYDDL);
 
-            bookDatabase.addBook(ba1, ba2, ba3, ba4, ba5);
+            // A DÁTUMFORMÁZÁST NEM ITT KELL ELVÉGEZNI,MERT A DB-BE MÉG STRINGKÉNT TUDOM BEVINNI CSAK A DÁTUMOT
+
+            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
 
 //            Date ba5date = null;
 //            try {
@@ -158,6 +135,8 @@ public class MainActivity extends AppCompatActivity {
 //            }
 
 //            bookData.add(new BookData(String.valueOf(ba1), ba2, ba3, ba4, ba5));
+
+            bookDatabase.addBook(ba1, ba2, ba3, ba4, ba5);
             populateListView();
 
         } else {
@@ -165,27 +144,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void feltoltDB() {
-//        bookData.add(new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS)));
-//        bookData.add(new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS)));
-//        bookData.add(new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS)));
-//        bookData.add(new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS)));
-//        bookData.add(new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS)));
-//        BookData dbBookData1 = new BookData(String.valueOf(faker.book().title()), String.valueOf(faker.address().fullAddress()), String.valueOf(faker.book().author()), String.valueOf(faker.name().fullName()), faker.date().future(360, TimeUnit.DAYS));
-//        Log.d(LOG_TAG, "feltoltDB: dbBookData1 created");
-//        bookDatabase.addBook(dbBookData1.getBookName(),dbBookData1.getDeliveryAddress(),dbBookData1.getBookAuthor(),dbBookData1.getContactName(),dbBookData1.getDeliveryDeadline().toString());
-//        Log.d(LOG_TAG, "feltoltDB: dbBookData1 added to database");
-    }
-
     private void populateListView() {
-        Log.d(LOG_TAG, "populateListView: data elements " + bookData.size());
-
-        ArrayList<BookData> bookDataPopulate = new ArrayList<>();
+        ArrayList<BookData> bookDataPopulateList = new ArrayList<>();
         Cursor cur = bookDatabase.getAllBooks();
 
         while (cur.moveToNext()) {
 
-            bookDataPopulate.add(new BookData(cur.getString(0),
+            //azthiszem itt,mielőtt addolunk, azelőtt kell átváltani dátumba
+
+            bookDataPopulateList.add(new BookData(cur.getString(0),
 
                     cur.getString(1),
 
@@ -194,37 +161,24 @@ public class MainActivity extends AppCompatActivity {
                     cur.getString(3),
 
                     cur.getString(4)
-
             ));
-
         }
 
-        bookData.clear();
-        bookData.addAll(bookDataPopulate);
+        bookDataList.clear();
+        bookDataList.addAll(bookDataPopulateList);
 
-
-        BookDataAdapter bookDataAdapter = new BookDataAdapter(MainActivity.this, R.layout.booklist_layout, bookData);// bookDataPopulate?
-
+        BookDataAdapter bookDataAdapter = new BookDataAdapter(MainActivity.this, R.layout.booklist_layout, bookDataList);// bookDataPopulateList?
         binding.mainListView.setAdapter(bookDataAdapter);
-
+        Log.d(LOG_TAG, "populateListView: There are " + bookDataList.size() +" elements in the list/db" );
     }
 
     /* MYDATABASE */
 
     public class BookDatabase extends SQLiteOpenHelper {
 
-
         public BookDatabase(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
             super(context, name, factory, version);
         }
-
-        public BookDatabase(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version, @Nullable DatabaseErrorHandler errorHandler) {
-            super(context, name, factory, version, errorHandler);
-        }
-
-//        public BookDatabase(@Nullable Context context, @Nullable String name, int version, @NonNull SQLiteDatabase.OpenParams openParams) {
-//            super(context, name, version, openParams);
-//        }
 
         @Override
         public void onCreate(SQLiteDatabase sqLiteDatabase) {
@@ -234,8 +188,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         }
-
-        //Feladat: Készíts egy SQLite adatbázist a könyvekhez. A könyvek listázását és a hozzáadást oldd meg adatbázissal.
 
         /* Összes könyv listázása */
         public Cursor getAllBooks() {
@@ -248,11 +200,10 @@ public class MainActivity extends AppCompatActivity {
             //db.close();
             return data;
         }
-        /* 1 könyv hozzáadása */
 
+        /* 1 könyv hozzáadása */
         public boolean addBook(String bookname, String deliveryaddress, String bookauthor, String contactname, String deliverydeadline) {
             SQLiteDatabase db = getWritableDatabase();
-            Log.d(LOG_TAG, "addBook: got the DB");
             ContentValues cv = new ContentValues();
 
             cv.put(BOOKS_TABLE_BOOKNAME, bookname);
@@ -260,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
             cv.put(BOOKS_TABLE_BOOKAUTHOR, bookauthor);
             cv.put(BOOKS_TABLE_CONTACT, contactname);
             cv.put(BOOKS_TABLE_DELIVERYDDL, deliverydeadline);
-            Log.d(LOG_TAG, "addBook: put the contentvalues ");
+
             long result = db.insert(BOOKS_TABLE, null, cv); // returns the id of the newly inserted row, or -1 if an error occured
 
             Log.d(LOG_TAG, "addBook: adding book result: " + result);
@@ -274,6 +225,12 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        /* Deleting all books from the database */
+        public void deleteAllBooks() {
+            SQLiteDatabase db = getWritableDatabase();
+            db.execSQL(DELETE_FROM + BOOKS_TABLE);
+            Log.d(LOG_TAG, "deleteAllBooks: deleting all rows was succesful ");
+        }
 
     }
 
