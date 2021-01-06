@@ -38,7 +38,7 @@ public class OptionsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d(LOG_TAG, "onClick: OK BUTTON CLICKED");
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt("SHOWX",Integer.valueOf(editShow.getText().toString()));
+                editor.putInt(Constants.SHOWX,Integer.valueOf(editShow.getText().toString()));
                 editor.apply();
                 Log.d(LOG_TAG, "onClick: List is set to display " +sharedPreferences.getInt("SHOWX",Integer.valueOf(editShow.getText().toString())) + " books." );
                 finish();

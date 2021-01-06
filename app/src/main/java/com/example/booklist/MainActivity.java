@@ -37,12 +37,10 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_CONTACTNAME = "com.example.android.booklist.extra.CONTACTNAME";
     public static final String EXTRA_DELIVERYDDL = "com.example.android.booklist.extra.DELVIERYDDL";
 
-    private static final String DATABASE_NAME = "books_db";
-    private static final int DATABASE_VERSION = 1;
 
     ActivityMainBinding binding;
     ArrayList<BookData> bookDataList;
-    BookDatabase bookDatabase = new BookDatabase(MainActivity.this, DATABASE_NAME, null, DATABASE_VERSION);
+    BookDatabase bookDatabase = new BookDatabase(MainActivity.this, Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
         bookDataList = new ArrayList<>();
 
 //      bookDatabase.deleteAllBooks();
-        populateListView();
 
         /* LISTENERS */
         binding.mainListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -75,35 +72,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        binding.floatingActionButtonAddBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i(LOG_TAG, "onClick: FloatingButton clicked");
-                Intent intentLaunchManualAdd = new Intent(MainActivity.this, ManualAddActivity.class);
-                startActivityForResult(intentLaunchManualAdd, 1);
-            }
-        });
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (resultCode == 5) {
-            super.onActivityResult(requestCode, resultCode, data);
-            Log.d(LOG_TAG, "onActivityResult: started");
-
-            String ba1 = data.getStringExtra(ManualAddActivity.EXTRA_ADD_BOOKNAME);
-            String ba2 = data.getStringExtra(ManualAddActivity.EXTRA_ADD_DELIVERYADDR);
-            String ba3 = data.getStringExtra(ManualAddActivity.EXTRA_ADD_BOOKAUTHOR);
-            String ba4 = data.getStringExtra(ManualAddActivity.EXTRA_ADD_CONTACTNAME);
-            String ba5 = data.getStringExtra(ManualAddActivity.EXTRA_ADD_DELIVERYDDL);
-
-            bookDatabase.addBook(ba1, ba2, ba3, ba4, ba5);
-            populateListView();
-
-        } else {
-            Log.d(LOG_TAG, "onActivityResult: something went wrong");
-        }
+    protected void onResume() {
+        super.onResume();
+        populateListView();
     }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        if (resultCode == 5) {
+//            super.onActivityResult(requestCode, resultCode, data);
+//            Log.d(LOG_TAG, "onActivityResult: started");
+//
+//            String ba1 = data.getStringExtra(ManualAddActivity.EXTRA_ADD_BOOKNAME);
+//            String ba2 = data.getStringExtra(ManualAddActivity.EXTRA_ADD_DELIVERYADDR);
+//            String ba3 = data.getStringExtra(ManualAddActivity.EXTRA_ADD_BOOKAUTHOR);
+//            String ba4 = data.getStringExtra(ManualAddActivity.EXTRA_ADD_CONTACTNAME);
+//            String ba5 = data.getStringExtra(ManualAddActivity.EXTRA_ADD_DELIVERYDDL);
+//
+//            bookDatabase.addBook(ba1, ba2, ba3, ba4, ba5);
+//
+//        } else {
+//            Log.d(LOG_TAG, "onActivityResult: something went wrong");
+//        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -114,12 +108,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.open_settings:
                 Intent intentOptions = new Intent(MainActivity.this, OptionsActivity.class);
                 startActivity(intentOptions);
                 Log.d(LOG_TAG, "onOptionsItemSelected: Launched OptionsActivity");
                 return true;
+            case R.id.add_book:
+                Log.i(LOG_TAG, "onClick: FloatingButton clicked");
+                Intent intentLaunchManualAdd = new Intent(MainActivity.this, ManualAddActivity.class);
+                startActivityForResult(intentLaunchManualAdd, 1);
         }
         return false;
     }
