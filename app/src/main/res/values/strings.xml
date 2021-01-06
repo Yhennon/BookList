@@ -12,5 +12,6 @@
     <string name="add_c_name">Enter contact\'s name</string>
     <string name="add_b_author">Enter book author\'s name</string>
     <string name="add_del_addr">Enter delivery address</string>
-    <string name="add_b_name" >Enter bookname</string>
+    <string name="add_b_name">Enter bookname</string>
+    <string name="showXdefault">5</string>
 </resources>

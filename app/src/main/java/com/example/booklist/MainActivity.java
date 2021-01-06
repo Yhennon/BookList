@@ -1,5 +1,6 @@
 package com.example.booklist;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,6 +14,9 @@ import android.os.Bundle;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -99,6 +103,25 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Log.d(LOG_TAG, "onActivityResult: something went wrong");
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.open_settings:
+                Intent intentOptions = new Intent(MainActivity.this, OptionsActivity.class);
+                startActivity(intentOptions);
+                Log.d(LOG_TAG, "onOptionsItemSelected: Launched OptionsActivity");
+                return true;
+        }
+        return false;
     }
 
     private void populateListView() {
