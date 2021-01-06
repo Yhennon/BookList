@@ -11,6 +11,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.yaml.snakeyaml.scanner.Constant;
 
 public class OptionsActivity extends AppCompatActivity {
     private static final String LOG_TAG = OptionsActivity.class.getSimpleName();
@@ -31,17 +34,29 @@ public class OptionsActivity extends AppCompatActivity {
         cancelButton = findViewById(R.id.buttonCancelO);
         okButton = findViewById(R.id.buttonOKO);
 
-        sharedPreferences = this.getSharedPreferences( Constants.COMMON,Context.MODE_PRIVATE);
+        sharedPreferences = this.getSharedPreferences(Constants.COMMON, Context.MODE_PRIVATE);
+        String newMax = String.valueOf(sharedPreferences.getInt(Constants.SHOWX, 0));
+
+
+        if (sharedPreferences.contains(Constants.SHOWX)) {
+            editShow.setText(newMax);
+            Log.d(LOG_TAG, "onCreate: Number of books to show is: " + newMax);
+        } else {
+            Toast.makeText(this, "Number of books to be showed is not set, default value is 5.", Toast.LENGTH_LONG);
+            Log.d(LOG_TAG, "onCreate: SHOWX is using default value: " + editShow.getText().toString());
+        }
+
 
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(LOG_TAG, "onClick: OK BUTTON CLICKED");
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt(Constants.SHOWX,Integer.valueOf(editShow.getText().toString()));
+                editor.putInt(Constants.SHOWX, Integer.valueOf(editShow.getText().toString()));
 //                editor.apply();
                 editor.commit();
-                Log.d(LOG_TAG, "onClick: List is set to display " +sharedPreferences.getInt(Constants.SHOWX,0) + " books." );
+
+                Log.d(LOG_TAG, "onClick: List is set to display a maximum of " + sharedPreferences.getInt(Constants.SHOWX, 0) + " book(s).");
                 finish();
             }
         });
@@ -51,7 +66,7 @@ public class OptionsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d(LOG_TAG, "onClick: CANCEL BUTTON CLICKED");
                 finish();
-                Log.d(LOG_TAG, "onClick: Setting display cancelled...\n" + "Displaying " + sharedPreferences.getInt(Constants.SHOWX,5) +" books.");
+                Log.d(LOG_TAG, "onClick: Setting display cancelled...\n" + "Displaying a maximum of" + sharedPreferences.getInt(Constants.SHOWX, 5) + " books.");
             }
         });
 

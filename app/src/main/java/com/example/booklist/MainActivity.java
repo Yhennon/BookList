@@ -78,11 +78,25 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        binding.floatingActionButtonAddBook.setOnClickListener(new View.OnClickListener() {
+        binding.floatingActionButtonRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(LOG_TAG, "onClick: floatingActionButton clicked");
+                Log.d(LOG_TAG, "onClick: floatingActionButtonRefresh clicked");
                 populateListView();
+            }
+        });
+//ne duplazzon,hanem mindig az initial SHOWX et adja hozza
+        binding.floatingActionButtonAddExtra.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(LOG_TAG, "onClick: floatingActionButtonAddExtra clicked");
+                int addExtra = sharedPreferences.getInt(Constants.SHOWX, 0);
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt(Constants.SHOWX, addExtra+addExtra);
+                editor.commit();
+                populateListView();
+
             }
         });
     }
@@ -145,7 +159,6 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "populate constant value:  "+x);
         int i = 0;
         while (cur.moveToNext()) {
-            Log.d(LOG_TAG, "populateListView: iteration: "+i);
             if (i >= x){
                 Log.d(LOG_TAG, "populateListView: break");
                 break;
@@ -170,9 +183,9 @@ public class MainActivity extends AppCompatActivity {
 
         BookDataAdapter bookDataAdapter = new BookDataAdapter(MainActivity.this, R.layout.booklist_layout, bookDataList);// bookDataPopulateList?
         binding.mainListView.setAdapter(bookDataAdapter);
-        Log.d(LOG_TAG, "populateListView: There are " + bookDataList.size() + " elements in the list/db");
+        Log.d(LOG_TAG, "populateListView: There are " + bookDataList.size() + " elements in the list");
         // Kérdés itt: itt mindig max akkorának írja, amennyit meg is jelenítünk. De a az adatbazisban nem mindig benne kellene lennie?
-        // viszont mikor ujat adok hozza,meg beállitam h mutasson mindent, akkor mutat, most mindig újraépítem valahol ?
+        // viszont mikor ujat adok hozza,meg beállitam h mutasson mindent, akkor mutat, most mindig újraépítem valahol ? :/
     }
 
 }
