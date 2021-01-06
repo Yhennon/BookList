@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
     ArrayList<BookData> bookDataList;
     BookDatabase bookDatabase = new BookDatabase(MainActivity.this, Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
+    SharedPreferences sharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +54,10 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "onCreate: Set the main view");
 
         bookDataList = new ArrayList<>();
+        sharedPreferences = getSharedPreferences(Constants.COMMON,Context.MODE_PRIVATE);
 
-//      bookDatabase.deleteAllBooks();
+
+//         bookDatabase.deleteAllBooks();
 
         /* LISTENERS */
         binding.mainListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -72,6 +77,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        binding.floatingActionButtonAddBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(LOG_TAG, "onClick: floatingActionButton clicked");
+                populateListView();
+            }
+        });
     }
 
     @Override
@@ -99,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //    }
 
+    /* MENU FUNCTIONS START */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -121,12 +135,21 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
+    /* MENU FUNCTIONS END */
 
     private void populateListView() {
         ArrayList<BookData> bookDataPopulateList = new ArrayList<>();
         Cursor cur = bookDatabase.getAllBooks();
+        int x = sharedPreferences.getInt(Constants.SHOWX,0);
 
+        Log.d(LOG_TAG, "populate constant value:  "+x);
+        int i = 0;
         while (cur.moveToNext()) {
+            Log.d(LOG_TAG, "populateListView: iteration: "+i);
+            if (i >= x){
+                Log.d(LOG_TAG, "populateListView: break");
+                break;
+            }
             SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
             String convert = cur.getString(4);
 
@@ -138,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             bookDataPopulateList.add(new BookData(cur.getString(0), cur.getString(1), cur.getString(2), cur.getString(3), convertAsDate));
+            i++;
         }
 
         bookDataList.clear(); // nagoyn fontos, mivel a populateListView-ot meghíjuk az elején is, h lássuk mi vna a dbben,
@@ -147,6 +171,8 @@ public class MainActivity extends AppCompatActivity {
         BookDataAdapter bookDataAdapter = new BookDataAdapter(MainActivity.this, R.layout.booklist_layout, bookDataList);// bookDataPopulateList?
         binding.mainListView.setAdapter(bookDataAdapter);
         Log.d(LOG_TAG, "populateListView: There are " + bookDataList.size() + " elements in the list/db");
+        // Kérdés itt: itt mindig max akkorának írja, amennyit meg is jelenítünk. De a az adatbazisban nem mindig benne kellene lennie?
+        // viszont mikor ujat adok hozza,meg beállitam h mutasson mindent, akkor mutat, most mindig újraépítem valahol ?
     }
 
 }

@@ -31,7 +31,7 @@ public class OptionsActivity extends AppCompatActivity {
         cancelButton = findViewById(R.id.buttonCancelO);
         okButton = findViewById(R.id.buttonOKO);
 
-        sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        sharedPreferences = this.getSharedPreferences( Constants.COMMON,Context.MODE_PRIVATE);
 
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,8 +39,9 @@ public class OptionsActivity extends AppCompatActivity {
                 Log.d(LOG_TAG, "onClick: OK BUTTON CLICKED");
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt(Constants.SHOWX,Integer.valueOf(editShow.getText().toString()));
-                editor.apply();
-                Log.d(LOG_TAG, "onClick: List is set to display " +sharedPreferences.getInt("SHOWX",Integer.valueOf(editShow.getText().toString())) + " books." );
+//                editor.apply();
+                editor.commit();
+                Log.d(LOG_TAG, "onClick: List is set to display " +sharedPreferences.getInt(Constants.SHOWX,0) + " books." );
                 finish();
             }
         });
@@ -50,7 +51,7 @@ public class OptionsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d(LOG_TAG, "onClick: CANCEL BUTTON CLICKED");
                 finish();
-                Log.d(LOG_TAG, "onClick: Setting display cancelled...\n" + "Displaying " + sharedPreferences.getInt("SHOWX",5) +" books.");
+                Log.d(LOG_TAG, "onClick: Setting display cancelled...\n" + "Displaying " + sharedPreferences.getInt(Constants.SHOWX,5) +" books.");
             }
         });
 
